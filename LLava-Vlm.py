@@ -335,13 +335,18 @@ def main():
     VIDEO_PATH = "Sample.mp4"  # Change to your video path
     PLAYER_A = "An Se Young"
     PLAYER_B = "Ratchanok Intanon"
-    GPU_DEVICE = "cuda:1"  # Use your idle GPU
     FPS_SAMPLE = 2  # Sample 1 frame every 2 seconds
     
-    # Initialize extractor
+    # Verify GPU
+    print(f"🔍 Available GPUs: {torch.cuda.device_count()}")
+    if torch.cuda.is_available():
+        print(f"✅ Using GPU: {torch.cuda.get_device_name(0)}")
+        print(f"💾 GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+    
+    # Initialize extractor (cuda:0 because we filtered with CUDA_VISIBLE_DEVICES)
     extractor = BadmintonVLMExtractor(
         model_name="llava-hf/llava-1.5-7b-hf",
-        device=GPU_DEVICE
+        device="cuda:0"  # This is actually GPU 1 from your system!
     )
     
     # Process video
@@ -356,6 +361,7 @@ def main():
 
 
 if __name__ == "__main__":
-    # Set environment for GPU 1
+    # IMPORTANT: Set this to use only GPU 1 (your idle GPU)
+    # After this line, GPU 1 becomes "cuda:0" in the program
     os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     main()

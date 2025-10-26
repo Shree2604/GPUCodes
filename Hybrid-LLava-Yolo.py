@@ -270,13 +270,11 @@ Reason: <reason>
 
 
 if __name__ == "__main__":
-    import os
-    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
-    
-    extractor = HybridBadmintonExtractor(device="cuda:0")  # Will use GPU 1
+    # Use GPU 1 (the idle one with only 6MB used)
+    extractor = HybridBadmintonExtractor(device="cuda:1")
     
     extractor.process_video(
-        video_path="Sample.mp4",
+        video_path="./Sample.mp4",
         player_a="An Se Young",
         player_b="Ratchanok Intanon"
     )
